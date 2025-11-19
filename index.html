@@ -439,9 +439,331 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+        /* Gallery Tab - Improved */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.gallery-item {
+    border-radius: 12px;
+    overflow: hidden;
+    height: 180px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.gallery-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+/* Fullscreen Image Viewer */
+.fullscreen-viewer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.fullscreen-viewer.active {
+    display: flex;
+    opacity: 1;
+}
+
+.fullscreen-image-container {
+    position: relative;
+    max-width: 90%;
+    max-height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fullscreen-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.viewer-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1001;
+}
+
+.viewer-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.viewer-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.nav-btn.prev {
+    left: 20px;
+}
+
+.nav-btn.next {
+    right: 20px;
+}
+
+.image-counter {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+/* Improved Mobile Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        margin-top: 20px;
+    }
+    
+    .content-area {
+        padding: 20px;
+        border-radius: 15px;
+    }
+    
+    .tabs {
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .tab {
+        padding: 10px 15px;
+        font-size: 14px;
+        border-radius: 25px;
+    }
+    
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .gallery-item {
+        height: 160px;
+        border-radius: 10px;
+    }
+    
+    /* Music player mobile improvements */
+    .song-player {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .song-cover {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .player-controls {
+        width: 100%;
+    }
+    
+    /* Fullscreen viewer mobile improvements */
+    .fullscreen-image-container {
+        max-width: 95%;
+        max-height: 70%;
+    }
+    
+    .nav-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .nav-btn.prev {
+        left: 10px;
+    }
+    
+    .nav-btn.next {
+        right: 10px;
+    }
+    
+    .viewer-controls {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .viewer-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+    
+    .image-counter {
+        bottom: 10px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .gallery-item {
+        height: 140px;
+    }
+    
+    .welcome-message {
+        font-size: 28px;
+        padding: 0 20px;
+    }
+    
+    .password-content {
+        padding: 20px;
+        margin: 20px;
+    }
+    
+    .password-content h2 {
+        font-size: 28px;
+    }
+    
+    .letter-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .letter-header span {
+        font-size: 14px;
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) {
+    .gallery-item:hover {
+        transform: none;
+    }
+    
+    .tab:hover {
+        transform: none;
+    }
+    
+    .song-player:hover {
+        transform: none;
+    }
+}
+
+/* High-resolution displays */
+@media (min-width: 1200px) {
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
+    }
+    
+    .gallery-item {
+        height: 200px;
+    }
+}
+
+/* Landscape mobile optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+    .fullscreen-image-container {
+        max-height: 85%;
+    }
+    
+    .container {
+        margin-top: 10px;
+    }
+    
+    .content-area {
+        min-height: 300px;
+    }
+}
     </style>
 </head>
 <body>
+    <!-- Fullscreen Image Viewer -->
+<div class="fullscreen-viewer" id="fullscreenViewer">
+    <div class="viewer-controls">
+        <button class="viewer-btn" id="closeViewer">✕</button>
+    </div>
+    
+    <button class="nav-btn prev" id="prevBtn">❮</button>
+    <button class="nav-btn next" id="nextBtn">❯</button>
+    
+    <div class="fullscreen-image-container">
+        <img class="fullscreen-image" id="fullscreenImage" src="" alt="">
+    </div>
+    
+    <div class="image-counter" id="imageCounter">1 / 17</div>
+</div>
     <!-- Password Modal -->
     <div class="password-modal" id="passwordModal">
         <div class="password-content">
@@ -663,6 +985,124 @@
     <div class="teddy-bear" style="bottom: 10%; right: 5%;">🧸</div>
     
     <script>
+        // Fullscreen Image Viewer functionality
+class ImageViewer {
+    constructor() {
+        this.currentIndex = 0;
+        this.images = [];
+        this.init();
+    }
+
+    init() {
+        this.viewer = document.getElementById('fullscreenViewer');
+        this.fullscreenImage = document.getElementById('fullscreenImage');
+        this.closeBtn = document.getElementById('closeViewer');
+        this.prevBtn = document.getElementById('prevBtn');
+        this.nextBtn = document.getElementById('nextBtn');
+        this.imageCounter = document.getElementById('imageCounter');
+
+        // Collect all gallery images
+        this.images = Array.from(document.querySelectorAll('.gallery-item img'));
+        
+        // Add click listeners to gallery images
+        this.images.forEach((img, index) => {
+            img.addEventListener('click', () => {
+                this.openViewer(index);
+            });
+        });
+
+        // Viewer controls
+        this.closeBtn.addEventListener('click', () => this.closeViewer());
+        this.prevBtn.addEventListener('click', () => this.showPrevious());
+        this.nextBtn.addEventListener('click', () => this.showNext());
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!this.viewer.classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    this.closeViewer();
+                    break;
+                case 'ArrowLeft':
+                    this.showPrevious();
+                    break;
+                case 'ArrowRight':
+                    this.showNext();
+                    break;
+            }
+        });
+
+        // Swipe support for mobile
+        this.setupSwipe();
+    }
+
+    openViewer(index) {
+        this.currentIndex = index;
+        this.updateViewer();
+        this.viewer.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+
+    closeViewer() {
+        this.viewer.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+
+    showPrevious() {
+        this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+        this.updateViewer();
+    }
+
+    showNext() {
+        this.currentIndex = (this.currentIndex + 1) % this.images.length;
+        this.updateViewer();
+    }
+
+    updateViewer() {
+        const imgSrc = this.images[this.currentIndex].src;
+        this.fullscreenImage.src = imgSrc;
+        this.fullscreenImage.alt = this.images[this.currentIndex].alt;
+        this.imageCounter.textContent = `${this.currentIndex + 1} / ${this.images.length}`;
+    }
+
+    setupSwipe() {
+        let startX = 0;
+        let endX = 0;
+
+        this.viewer.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+
+        this.viewer.addEventListener('touchmove', (e) => {
+            endX = e.touches[0].clientX;
+        });
+
+        this.viewer.addEventListener('touchend', () => {
+            const diffX = startX - endX;
+            const minSwipeDistance = 50;
+
+            if (Math.abs(diffX) > minSwipeDistance) {
+                if (diffX > 0) {
+                    this.showNext();
+                } else {
+                    this.showPrevious();
+                }
+            }
+        });
+    }
+}
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // ... существующий код ...
+    
+    // Initialize audio player
+    new AudioPlayer();
+    
+    // Initialize image viewer
+    new ImageViewer();
+});
         document.addEventListener('DOMContentLoaded', function() {
             // Password check
             const passwordModal = document.getElementById('passwordModal');
@@ -857,6 +1297,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 </body>
 </html>
+
 
 
 
