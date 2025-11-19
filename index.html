@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Love</title>
+    <title>Для моей Любви <:3</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -339,42 +339,42 @@
     <!-- Password Modal -->
     <div class="password-modal" id="passwordModal">
         <div class="password-content">
-            <h2>Enter the secret code</h2>
+            <h2>Введи секретное слово...</h2>
             <input type="password" class="password-input" id="passwordInput" placeholder="Our special word...">
-            <button class="submit-btn" id="submitPassword">Enter</button>
+            <button class="submit-btn" id="submitPassword">Ввести</button>
         </div>
     </div>
     
     <!-- Welcome Screen -->
     <div class="welcome-screen" id="welcomeScreen">
-        <h1 class="welcome-message">Welcome my love, enjoy your stay</h1>
+        <h1 class="welcome-message">Добро пожаловать, Любовь моя, я был уверен что ты справишься :)</h1>
     </div>
     
     <!-- Main Content -->
     <div class="container" id="mainContent" style="display: none;">
         <div class="tabs">
             <button class="tab active" data-tab="love-letter">
-                <span>❤️</span> Love Letter
+                <span>❤️</span> Моё письмо Любви
             </button>
             <button class="tab" data-tab="music">
-                <span>🎵</span> Music
+                <span>🎵</span> Наша музыка
             </button>
             <button class="tab" data-tab="notes">
-                <span>📝</span> Notes
+                <span>📝</span> Заметки
             </button>
             <button class="tab" data-tab="gallery">
-                <span>🌷</span> Gallery
+                <span>🌷</span> Наш фотоальбом
             </button>
         </div>
         
         <div class="content-area">
             <!-- Love Letter Tab -->
             <div class="tab-content active" id="love-letter">
-                <h2>My Dearest</h2>
+                <h2>Моя самая дорогая</h2>
                 <div class="letter" id="loveLetter">
                     <div class="letter-header">
-                        <h3>A Letter For You</h3>
-                        <span>👇 Click to open</span>
+                        <h3>Письмо для тебя</h3>
+                        <span>👇 Кликни, чтобы открыть</span>
                     </div>
                     <div class="letter-content">
                         <p>My love,</p>
@@ -464,7 +464,7 @@
             const submitPassword = document.getElementById('submitPassword');
             
             submitPassword.addEventListener('click', function() {
-                if (passwordInput.value.toLowerCase() === 'babycakes') {
+                if (passwordInput.value.toLowerCase() === 'МакАвто') {
                     passwordModal.style.opacity = '0';
                     setTimeout(() => {
                         passwordModal.style.display = 'none';
@@ -480,11 +480,11 @@
                     }, 500);
                 } else {
                     passwordInput.value = '';
-                    passwordInput.placeholder = 'Try again, my love...';
+                    passwordInput.placeholder = 'Попробуй ещё раз, Любовь моя...';
                     passwordInput.style.borderColor = '#ff4d4d';
                     setTimeout(() => {
                         passwordInput.style.borderColor = '#ffb7c5';
-                        passwordInput.placeholder = 'Our special word...';
+                        passwordInput.placeholder = 'Это наше общее слово...';
                     }, 1500);
                 }
             });
@@ -552,3 +552,4 @@
     </script>
 </body>
 </html>
+
