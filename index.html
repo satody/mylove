@@ -493,33 +493,49 @@
             </div>
             
             <!-- Music Tab -->
-            <div class="tab-content" id="music">
-                <h2>Треки, которые напоминают о тебе</h2>
-                <div class="song">
-                    <div class="song-icon">🎵</div>
-                    <div class="song-info">
-                        <h4>Urban Melody</h4>
-                        <p>IVOXYGEN</p>
+<div class="tab-content" id="music">
+    <h2>Наши треки</h2>
+    
+    <div class="song-player">
+        <div class="song-cover">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1eaad721-3375-4d97-a5fa-cbf8a87d60b8.png" alt="Обложка Urban Melody">
+        </div>
+        <div class="song-info">
+            <h4>Urban Melody</h4>
+            <p>IVOXYGEN</p>
+            <div class="audio-player">
+                <audio id="urbanAudio" src="audio/urbanmelody.mp3"></audio>
+                <div class="player-controls">
+                    <button class="play-btn" data-audio="urbanAudio">▶️</button>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
                     </div>
-                    <div class="audio-player">
-                    <audio id="urbanAudio" src="audio/urbanmelody.mp3"></audio>
-                        <div class="player-controls">
-                        <button class="play-btn" data-audio="urbanAudio">▶️</button>
-                            <div class="progress-bar">
-                                <div class="progress"></div>
-                            </div>
-                                <span class="time">0:00</span>
-                            </div>
-                        </div>
-                    </div>
-                <div class="song">
-                    <div class="song-icon">🎵</div>
-                    <div class="song-info">
-                        <h4>Wish</h4>
-                        <p>by 16</p>
-                    </div>
+                    <span class="time">0:00</span>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="song-player">
+        <div class="song-cover">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/73632299-5dde-4ded-805a-88a7dcb4b5e4.png" alt="Обложка Wish">
+        </div>
+        <div class="song-info">
+            <h4>Wish</h4>
+            <p>by 16</p>
+            <div class="audio-player">
+                <audio id="wishAudio" src="audio/wish.mp3"></audio>
+                <div class="player-controls">
+                    <button class="play-btn" data-audio="wishAudio">▶️</button>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <span class="time">0:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
             
             <!-- Notes Tab -->
             <div class="tab-content" id="notes">
@@ -764,6 +780,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 </body>
 </html>
+
 
 
 
