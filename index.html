@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Для моей Любви <:3</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50%' y='60%' dominant-baseline='middle' text-anchor='middle' font-size='70'>❤️</text></svg>">
+    <audio id="urbanAudio" src="audio/urbanmelody.mp3" preload="metadata"></audio>
+    <audio id="tfestAudio" src="audio/tfest.mp3" preload="metadata"></audio>
+    <audio id="scripAudio" src="audio/scrip.mp3" preload="metadata"></audio>
     <style>
     /* Music Player Styles */
 .song-player {
@@ -622,40 +625,63 @@ body {
         width: 100%;
     }
     
-    /* Fullscreen viewer mobile improvements */
+    /* Fullscreen viewer mobile improvements - FIXED */
+    .fullscreen-viewer {
+        width: 100vw;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+    }
+    
     .fullscreen-image-container {
-        width: 98vw;
-        height: 80vh;
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        max-height: none;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    
+    .fullscreen-image {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+    }
+    
+    .image-counter {
+        bottom: 20px;
+        font-size: 16px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px 20px;
+        z-index: 1002;
     }
     
     .nav-btn {
         width: 50px;
         height: 50px;
         font-size: 20px;
+        background: rgba(255, 255, 255, 0.3);
     }
     
     .nav-btn.prev {
-        left: 10px;
+        left: 15px;
     }
     
     .nav-btn.next {
-        right: 10px;
+        right: 15px;
     }
     
     .viewer-controls {
-        top: 10px;
-        right: 10px;
+        top: 15px;
+        right: 15px;
     }
     
     .viewer-btn {
         width: 45px;
         height: 45px;
         font-size: 18px;
-    }
-    
-    .image-counter {
-        bottom: 10px;
-        font-size: 14px;
+        background: rgba(255, 255, 255, 0.3);
     }
     
     /* Love letter mobile improvements */
@@ -705,6 +731,25 @@ body {
     .password-content h2 {
         font-size: 28px;
     }
+    .image-counter {
+        bottom: 15px;
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+    
+    .nav-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+    
+    .nav-btn.prev {
+        left: 10px;
+    }
+    
+    .nav-btn.next {
+        right: 10px;
+    }
 }
 
 /* Touch device improvements */
@@ -750,6 +795,23 @@ body {
     
     .welcome-message {
         font-size: 32px;
+    }
+}
+/* Fix for very small mobile devices */
+@media (max-width: 360px) {
+    .image-counter {
+        font-size: 12px;
+        padding: 6px 12px;
+        bottom: 10px;
+    }
+    
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+    
+    .gallery-item {
+        height: 120px;
     }
 }
     </style>
@@ -991,13 +1053,125 @@ body {
     <div class="teddy-bear" style="bottom: 10%; right: 5%;">🧸</div>
     
     <script>
-        // Prevent layout issues
+       // Prevent layout issues
 document.addEventListener('DOMContentLoaded', function() {
     // Force redraw to fix initial rendering issues
     setTimeout(() => {
         document.body.style.overflowX = 'hidden';
     }, 100);
 });
+
+// Audio Player functionality
+class AudioPlayer {
+    constructor() {
+        this.currentAudio = null;
+        this.isPlaying = false;
+        this.init();
+    }
+
+    init() {
+        const playButtons = document.querySelectorAll('.play-btn');
+        
+        playButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const audioId = e.target.getAttribute('data-audio');
+                const audio = document.getElementById(audioId);
+                this.togglePlay(audio, e.target);
+            });
+        });
+
+        // Initialize progress bars and time updates
+        document.querySelectorAll('audio').forEach(audio => {
+            this.setupAudioListeners(audio);
+        });
+    }
+
+    togglePlay(audio, button) {
+        // Stop currently playing audio
+        if (this.currentAudio && this.currentAudio !== audio) {
+            this.currentAudio.pause();
+            const prevButton = document.querySelector(`[data-audio="${this.currentAudio.id}"]`);
+            if (prevButton) {
+                prevButton.textContent = '▶️';
+                prevButton.classList.remove('playing');
+                // Reset progress for previous audio
+                const prevProgress = prevButton.closest('.player-controls').querySelector('.progress');
+                if (prevProgress) prevProgress.style.width = '0%';
+                const prevTime = prevButton.closest('.player-controls').querySelector('.time');
+                if (prevTime) prevTime.textContent = '0:00';
+            }
+        }
+
+        if (audio.paused) {
+            audio.play().catch(error => {
+                console.log('Audio play failed:', error);
+                // Fallback for autoplay restrictions
+                button.textContent = '▶️';
+                button.classList.remove('playing');
+            });
+            button.textContent = '⏸️';
+            button.classList.add('playing');
+            this.currentAudio = audio;
+            this.isPlaying = true;
+        } else {
+            audio.pause();
+            button.textContent = '▶️';
+            button.classList.remove('playing');
+            this.isPlaying = false;
+        }
+    }
+
+    setupAudioListeners(audio) {
+        const button = document.querySelector(`[data-audio="${audio.id}"]`);
+        if (!button) return;
+
+        const progressBar = button.closest('.player-controls').querySelector('.progress');
+        const timeDisplay = button.closest('.player-controls').querySelector('.time');
+
+        // Reset audio to beginning when loaded
+        audio.addEventListener('loadedmetadata', () => {
+            if (timeDisplay) timeDisplay.textContent = '0:00';
+            if (progressBar) progressBar.style.width = '0%';
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                if (progressBar) progressBar.style.width = percent + '%';
+                
+                // Update time display
+                const currentTime = this.formatTime(audio.currentTime);
+                if (timeDisplay) timeDisplay.textContent = `${currentTime}`;
+            }
+        });
+
+        audio.addEventListener('ended', () => {
+            button.textContent = '▶️';
+            button.classList.remove('playing');
+            if (progressBar) progressBar.style.width = '0%';
+            if (timeDisplay) timeDisplay.textContent = '0:00';
+            this.isPlaying = false;
+        });
+
+        // Click on progress bar to seek
+        const progressContainer = button.closest('.player-controls').querySelector('.progress-bar');
+        if (progressContainer) {
+            progressContainer.addEventListener('click', (e) => {
+                const rect = progressContainer.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                audio.currentTime = percent * audio.duration;
+            });
+        }
+    }
+
+    formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+}
+
 // Fullscreen Image Viewer functionality
 class ImageViewer {
     constructor() {
@@ -1121,210 +1295,112 @@ class ImageViewer {
         });
     }
 }
-// Initialize everything when DOM is loaded
+
+// Main initialization
 document.addEventListener('DOMContentLoaded', function() {
-    // ... существующий код ...
+    // Password check
+    const passwordModal = document.getElementById('passwordModal');
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const mainContent = document.getElementById('mainContent');
+    const passwordInput = document.getElementById('passwordInput');
+    const submitPassword = document.getElementById('submitPassword');
     
-    // Initialize audio player
-    new AudioPlayer();
-    
-    // Initialize image viewer
-    new ImageViewer();
-});
-        document.addEventListener('DOMContentLoaded', function() {
-            // Password check
-            const passwordModal = document.getElementById('passwordModal');
-            const welcomeScreen = document.getElementById('welcomeScreen');
-            const mainContent = document.getElementById('mainContent');
-            const passwordInput = document.getElementById('passwordInput');
-            const submitPassword = document.getElementById('submitPassword');
-            
-            submitPassword.addEventListener('click', function() {
-                if (passwordInput.value.toLowerCase() === 'deluxe') {
-                    passwordModal.style.opacity = '0';
-                    setTimeout(() => {
-                        passwordModal.style.display = 'none';
-                        welcomeScreen.style.display = 'flex';
-                        
-                        setTimeout(() => {
-                            welcomeScreen.style.opacity = '0';
-                            setTimeout(() => {
-                                welcomeScreen.style.display = 'none';
-                                mainContent.style.display = 'block';
-                            }, 800);
-                        }, 2500);
-                    }, 500);
-                } else {
-                    passwordInput.value = '';
-                    passwordInput.placeholder = 'Попробуй ещё раз, Любовь моя...';
-                    passwordInput.style.borderColor = '#ff4d4d';
-                    setTimeout(() => {
-                        passwordInput.style.borderColor = '#ffb7c5';
-                        passwordInput.placeholder = 'Это наше общее слово...';
-                    }, 1500);
-                }
-            });
-            
-            // Allow Enter key to submit password
-            passwordInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    submitPassword.click();
-                }
-            });
-            
-            // Tab switching
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const targetTab = this.getAttribute('data-tab');
-                    
-                    // Update active tab
-                    tabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Show corresponding content
-                    tabContents.forEach(content => {
-                        content.classList.remove('active');
-                        if (content.id === targetTab) {
-                            content.classList.add('active');
-                        }
-                    });
-                });
-            });
-            
-            // Expandable love letter
-            const loveLetter = document.getElementById('loveLetter');
-            loveLetter.addEventListener('click', function() {
-                this.classList.toggle('expanded');
-            });
-            
-            // Add floating decorative elements
-            function addFloatingElements() {
-                for (let i = 0; i < 15; i++) {
-                    const heart = document.createElement('div');
-                    heart.classList.add('heart');
-                    heart.innerHTML = '❤️';
-                    heart.style.left = Math.random() * 100 + '%';
-                    heart.style.top = Math.random() * 100 + '%';
-                    heart.style.animationDelay = Math.random() * 5 + 's';
-                    document.body.appendChild(heart);
-                }
+    submitPassword.addEventListener('click', function() {
+        if (passwordInput.value.toLowerCase() === 'deluxe') {
+            passwordModal.style.opacity = '0';
+            setTimeout(() => {
+                passwordModal.style.display = 'none';
+                welcomeScreen.style.display = 'flex';
                 
-                for (let i = 0; i < 5; i++) {
-                    const teddy = document.createElement('div');
-                    teddy.classList.add('teddy-bear');
-                    teddy.innerHTML = '🧸';
-                    teddy.style.left = Math.random() * 100 + '%';
-                    teddy.style.top = Math.random() * 100 + '%';
-                    teddy.style.animationDelay = Math.random() * 5 + 's';
-                    document.body.appendChild(teddy);
-                }
-            }
+                setTimeout(() => {
+                    welcomeScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        welcomeScreen.style.display = 'none';
+                        mainContent.style.display = 'block';
+                        
+                        // Initialize components after content is shown
+                        setTimeout(() => {
+                            new AudioPlayer();
+                            new ImageViewer();
+                        }, 100);
+                    }, 800);
+                }, 2500);
+            }, 500);
+        } else {
+            passwordInput.value = '';
+            passwordInput.placeholder = 'Попробуй ещё раз, Любовь моя...';
+            passwordInput.style.borderColor = '#ff4d4d';
+            setTimeout(() => {
+                passwordInput.style.borderColor = '#ffb7c5';
+                passwordInput.placeholder = 'Это наше общее слово...';
+            }, 1500);
+        }
+    });
+    
+    // Allow Enter key to submit password
+    passwordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            submitPassword.click();
+        }
+    });
+    
+    // Tab switching
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetTab = this.getAttribute('data-tab');
             
-            addFloatingElements();
-        });
-        // Audio Player functionality
-class AudioPlayer {
-    constructor() {
-        this.currentAudio = null;
-        this.isPlaying = false;
-        this.init();
-    }
-
-    init() {
-        const playButtons = document.querySelectorAll('.play-btn');
-        
-        playButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                const audioId = e.target.getAttribute('data-audio');
-                const audio = document.getElementById(audioId);
-                this.togglePlay(audio, e.target);
+            // Update active tab
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show corresponding content
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === targetTab) {
+                    content.classList.add('active');
+                }
             });
         });
-
-        // Initialize progress bars and time updates
-        document.querySelectorAll('audio').forEach(audio => {
-            this.setupAudioListeners(audio);
-        });
-    }
-
-    togglePlay(audio, button) {
-        // Stop currently playing audio
-        if (this.currentAudio && this.currentAudio !== audio) {
-            this.currentAudio.pause();
-            const prevButton = document.querySelector(`[data-audio="${this.currentAudio.id}"]`);
-            if (prevButton) {
-                prevButton.textContent = '▶️';
-                prevButton.classList.remove('playing');
-            }
-        }
-
-        if (audio.paused) {
-            audio.play();
-            button.textContent = '⏸️';
-            button.classList.add('playing');
-            this.currentAudio = audio;
-            this.isPlaying = true;
-        } else {
-            audio.pause();
-            button.textContent = '▶️';
-            button.classList.remove('playing');
-            this.isPlaying = false;
-        }
-    }
-
-    setupAudioListeners(audio) {
-        const button = document.querySelector(`[data-audio="${audio.id}"]`);
-        const progressBar = button.closest('.player-controls').querySelector('.progress');
-        const timeDisplay = button.closest('.player-controls').querySelector('.time');
-
-        audio.addEventListener('timeupdate', () => {
-            const percent = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = percent + '%';
-            
-            // Update time display
-            const currentTime = this.formatTime(audio.currentTime);
-            const duration = this.formatTime(audio.duration);
-            timeDisplay.textContent = `${currentTime}`;
-        });
-
-        audio.addEventListener('ended', () => {
-            button.textContent = '▶️';
-            button.classList.remove('playing');
-            progressBar.style.width = '0%';
-            timeDisplay.textContent = '0:00';
-            this.isPlaying = false;
-        });
-
-        // Click on progress bar to seek
-        const progressContainer = button.closest('.player-controls').querySelector('.progress-bar');
-        progressContainer.addEventListener('click', (e) => {
-            const rect = progressContainer.getBoundingClientRect();
-            const percent = (e.clientX - rect.left) / rect.width;
-            audio.currentTime = percent * audio.duration;
-        });
-    }
-
-    formatTime(seconds) {
-        if (isNaN(seconds)) return '0:00';
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-    }
-}
-
-// Initialize audio player when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // ... существующий код ...
+    });
     
-    // Initialize audio player
-    new AudioPlayer();
+    // Expandable love letter
+    const loveLetter = document.getElementById('loveLetter');
+    loveLetter.addEventListener('click', function() {
+        this.classList.toggle('expanded');
+    });
+    
+    // Add floating decorative elements
+    function addFloatingElements() {
+        for (let i = 0; i < 15; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.top = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(heart);
+        }
+        
+        for (let i = 0; i < 5; i++) {
+            const teddy = document.createElement('div');
+            teddy.classList.add('teddy-bear');
+            teddy.innerHTML = '🧸';
+            teddy.style.left = Math.random() * 100 + '%';
+            teddy.style.top = Math.random() * 100 + '%';
+            teddy.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(teddy);
+        }
+    }
+    
+    addFloatingElements();
 });
     </script>
 </body>
 </html>
+
 
 
 
