@@ -6,6 +6,111 @@
     <title>Для моей Любви <:3</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* Music Player Styles */
+.song-player {
+    background: #f8e8ee;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.song-player:hover {
+    transform: translateY(-2px);
+}
+
+.song-cover {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.song-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.song-info {
+    flex: 1;
+}
+
+.song-info h4 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #d81b60;
+}
+
+.song-info p {
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.audio-player {
+    width: 100%;
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.play-btn {
+    background: #d81b60;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.play-btn:hover {
+    background: #b71550;
+    transform: scale(1.1);
+}
+
+.play-btn.playing {
+    background: #b71550;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(216, 27, 96, 0.2);
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: #d81b60;
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+.time {
+    font-size: 14px;
+    color: #d81b60;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: center;
+}
         * {
             margin: 0;
             padding: 0;
@@ -393,10 +498,20 @@
                 <div class="song">
                     <div class="song-icon">🎵</div>
                     <div class="song-info">
-                        <h4>Hiwaga</h4>
-                        <p>by Tatin DC</p>
+                        <h4>Urban Melody</h4>
+                        <p>IVOXYGEN</p>
                     </div>
-                </div>
+                    <div class="audio-player">
+                    <audio id="urbanAudio" src="audio/urbanmelody.mp3"></audio>
+                        <div class="player-controls">
+                        <button class="play-btn" data-audio="urbanAudio">▶️</button>
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                                <span class="time">0:00</span>
+                            </div>
+                        </div>
+                    </div>
                 <div class="song">
                     <div class="song-icon">🎵</div>
                     <div class="song-info">
@@ -549,9 +664,107 @@
             
             addFloatingElements();
         });
+        // Audio Player functionality
+class AudioPlayer {
+    constructor() {
+        this.currentAudio = null;
+        this.isPlaying = false;
+        this.init();
+    }
+
+    init() {
+        const playButtons = document.querySelectorAll('.play-btn');
+        
+        playButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const audioId = e.target.getAttribute('data-audio');
+                const audio = document.getElementById(audioId);
+                this.togglePlay(audio, e.target);
+            });
+        });
+
+        // Initialize progress bars and time updates
+        document.querySelectorAll('audio').forEach(audio => {
+            this.setupAudioListeners(audio);
+        });
+    }
+
+    togglePlay(audio, button) {
+        // Stop currently playing audio
+        if (this.currentAudio && this.currentAudio !== audio) {
+            this.currentAudio.pause();
+            const prevButton = document.querySelector(`[data-audio="${this.currentAudio.id}"]`);
+            if (prevButton) {
+                prevButton.textContent = '▶️';
+                prevButton.classList.remove('playing');
+            }
+        }
+
+        if (audio.paused) {
+            audio.play();
+            button.textContent = '⏸️';
+            button.classList.add('playing');
+            this.currentAudio = audio;
+            this.isPlaying = true;
+        } else {
+            audio.pause();
+            button.textContent = '▶️';
+            button.classList.remove('playing');
+            this.isPlaying = false;
+        }
+    }
+
+    setupAudioListeners(audio) {
+        const button = document.querySelector(`[data-audio="${audio.id}"]`);
+        const progressBar = button.closest('.player-controls').querySelector('.progress');
+        const timeDisplay = button.closest('.player-controls').querySelector('.time');
+
+        audio.addEventListener('timeupdate', () => {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = percent + '%';
+            
+            // Update time display
+            const currentTime = this.formatTime(audio.currentTime);
+            const duration = this.formatTime(audio.duration);
+            timeDisplay.textContent = `${currentTime}`;
+        });
+
+        audio.addEventListener('ended', () => {
+            button.textContent = '▶️';
+            button.classList.remove('playing');
+            progressBar.style.width = '0%';
+            timeDisplay.textContent = '0:00';
+            this.isPlaying = false;
+        });
+
+        // Click on progress bar to seek
+        const progressContainer = button.closest('.player-controls').querySelector('.progress-bar');
+        progressContainer.addEventListener('click', (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = percent * audio.duration;
+        });
+    }
+
+    formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+}
+
+// Initialize audio player when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // ... существующий код ...
+    
+    // Initialize audio player
+    new AudioPlayer();
+});
     </script>
 </body>
 </html>
+
 
 
 
