@@ -598,6 +598,34 @@ body {
 
 /* Improved Mobile Responsiveness */
 @media (max-width: 768px) {
+    /* Более агрессивное исправление */
+.audio-player {
+    width: 100%;
+    min-width: 0;
+}
+
+.player-controls {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.play-btn {
+    grid-column: 1;
+}
+
+.progress-bar {
+    grid-column: 2;
+    min-width: 0;
+    width: 100%;
+}
+
+.time {
+    grid-column: 3;
+    min-width: 45px;
+}
     .welcome-message {
         font-size: 36px;
     }
@@ -739,6 +767,34 @@ body {
 }
 
 @media (max-width: 480px) {
+    /* Более агрессивное исправление */
+.audio-player {
+    width: 100%;
+    min-width: 0;
+}
+
+.player-controls {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.play-btn {
+    grid-column: 1;
+}
+
+.progress-bar {
+    grid-column: 2;
+    min-width: 0;
+    width: 100%;
+}
+
+.time {
+    grid-column: 3;
+    min-width: 45px;
+}
     .gallery {
         grid-template-columns: repeat(2, 1fr);
         gap: 8px;
@@ -796,25 +852,34 @@ body {
     }
 }
 @media (max-width: 768px) {
-    .player-controls {
-        gap: 12px; /* Уменьши gap на мобильных */
-    }
-    
-    .progress-bar {
-        flex: 1 1 auto; /* Более гибкое растяжение */
-        min-width: 0;
-    }
-    
-    .time {
-        min-width: 40px; /* Чуть меньше на мобильных */
-        font-size: 13px;
-    }
-    
-    .play-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 14px;
-    }
+    /* Более агрессивное исправление */
+.audio-player {
+    width: 100%;
+    min-width: 0;
+}
+
+.player-controls {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.play-btn {
+    grid-column: 1;
+}
+
+.progress-bar {
+    grid-column: 2;
+    min-width: 0;
+    width: 100%;
+}
+
+.time {
+    grid-column: 3;
+    min-width: 45px;
+}
 }
 
 @media (max-width: 480px) {
@@ -1460,6 +1525,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 </body>
 </html>
+
 
 
 
