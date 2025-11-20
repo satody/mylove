@@ -55,9 +55,33 @@
     color: #888;
     margin-bottom: 15px;
 }
-
+/* Более агрессивное исправление */
 .audio-player {
     width: 100%;
+    min-width: 0;
+}
+
+.player-controls {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.play-btn {
+    grid-column: 1;
+}
+
+.progress-bar {
+    grid-column: 2;
+    min-width: 0;
+    width: 100%;
+}
+
+.time {
+    grid-column: 3;
+    min-width: 45px;
 }
 /* Fix for progress bars consistency */
 .player-controls {
@@ -1436,6 +1460,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 </body>
 </html>
+
 
 
 
